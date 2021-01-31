@@ -14,8 +14,8 @@ namespace DataAccess.Abstract
         Task DeleteAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task<List<TEntity>> GetAll();
-        Task<List<TEntity>> GetListWithSpesification(ISpesification<TEntity> spesification);
-        Task<List<TEntity>> GetWithSpesification(ISpesification<TEntity> spesification);
+        Task<List<TEntity>> GetListWithSpesificationAsync(ISpesification<TEntity> spesification);
+        Task<TEntity> GetWithSpesificationAsync(ISpesification<TEntity> spesification);
 
     }
 }
