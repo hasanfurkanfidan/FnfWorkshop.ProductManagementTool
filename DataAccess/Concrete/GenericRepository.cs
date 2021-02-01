@@ -1,7 +1,8 @@
-﻿using DataAccess.Abstract;
+﻿using Core.Abstract;
+using Core.DataAccess.EntityFrameworkCore.Abstract;
+using Core.Spesification;
+using DataAccess.Abstract;
 using DataAccess.Context;
-using DataAccess.Spesification;
-using Enities.Abstract;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
