@@ -14,7 +14,7 @@ namespace Enities.Concrete
         public string ImageUrl { get; set; }
         //Parent
         public Category ParentGategory { get; set; }
-        public int ParentCategoryId { get; set; }
+        public int? ParentCategoryId { get; set; }
         public Application Application { get; set; }
         public int ApplicationId { get; set; }
     }
