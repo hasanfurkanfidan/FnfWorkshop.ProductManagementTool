@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Spesification
+namespace Core.Spesification
 {
     public class BaseSpesification<T> : ISpesification<T>
     {

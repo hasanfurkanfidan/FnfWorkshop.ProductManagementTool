@@ -1,4 +1,4 @@
-﻿using DataAccess.Spesification;
+﻿using Core.Spesification;
 using Enities.Abstract;
 using System;
 using System.Collections.Generic;

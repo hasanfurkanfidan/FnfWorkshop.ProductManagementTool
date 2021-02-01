@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Spesification
+namespace Core.Spesification
 {
     public class SpesificationEvaulator<TEntity> where TEntity:class,IEntity,new()
     {
