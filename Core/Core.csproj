@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Business\" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <Folder Include="Business\" />
   </ItemGroup>
 
 </Project>
