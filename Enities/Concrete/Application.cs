@@ -9,6 +9,8 @@ namespace Enities.Concrete
 {
     public class Application:IEntity
     {
+        //Hepsiburada 
+        // 2 
         public int Id { get; set; }
         public string AppName { get; set; }
         public List<Product> Products { get; set; }

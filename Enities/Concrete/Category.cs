@@ -17,5 +17,6 @@ namespace Enities.Concrete
         public int? ParentCategoryId { get; set; }
         public Application Application { get; set; }
         public int ApplicationId { get; set; }
+        public List<Category> SubCategories { get; set; }
     }
 }
