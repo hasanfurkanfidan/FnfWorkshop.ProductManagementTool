@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Spesification;
 using Core.Utilities.BusinessRule;
 using Core.Utilities.Result;
@@ -15,6 +16,7 @@ namespace Business.Concrete
     public class MetaDataManager : IMetaDataService
     {
         private readonly IProductRepository _productRepository;
+        
         public MetaDataManager(IProductRepository productRepository)
         {
             _productRepository = productRepository;
@@ -27,7 +29,7 @@ namespace Business.Concrete
                 return result;
             }
             await _productRepository.AddAsync(product);
-            return new SuccessResult("Product Added");
+            return new SuccessResult(Messages.ProductAdded);
         }
 
         public async Task<IResult> CheckProductNameExistAsync(string productName)
@@ -36,7 +38,7 @@ namespace Business.Concrete
             var result = product.Any();
             if (result)
             {
-                return new ErrorResult("Product Name already exist.");
+                return new ErrorResult(Messages.ProductExist);
             }
             return new SuccessResult();
         }
