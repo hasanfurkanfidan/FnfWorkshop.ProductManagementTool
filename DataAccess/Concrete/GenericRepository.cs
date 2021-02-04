@@ -37,17 +37,18 @@ namespace DataAccess.Concrete
 
         public async Task<List<TEntity>> GetListWithSpesificationAsync(ISpesification<TEntity> spesification)
         {
-            var query = ApplySpesification(spesification);
+            using var context = new ProductContext();
+            var query = ApplySpesification(context,spesification);
             return await query.ToListAsync();
         }
-        private IQueryable<TEntity> ApplySpesification(ISpesification<TEntity> spesification)
+        private IQueryable<TEntity> ApplySpesification(ProductContext context,ISpesification<TEntity> spesification)
         {
-            using var context = new ProductContext();
             return SpesificationEvaulator<TEntity>.GetQuery(context.Set<TEntity>().AsQueryable(), spesification);
         }
         public async Task<TEntity> GetWithSpesificationAsync(ISpesification<TEntity> spesification)
         {
-            var query = ApplySpesification(spesification);
+            using var context = new ProductContext();
+            var query = ApplySpesification(context, spesification);
             return await query.FirstOrDefaultAsync();
         }
 
