@@ -34,9 +34,8 @@ namespace Business.Concrete
 
         public async Task<IResult> CheckProductNameExistAsync(string productName)
         {
-            var product = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product> { Criteria = p => p.Name == productName });
-            var result = product.Any();
-            if (result)
+            var products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product> { Criteria = p => p.Name == productName });
+            if (products.Count>0)
             {
                 return new ErrorResult(Messages.ProductExist);
             }
