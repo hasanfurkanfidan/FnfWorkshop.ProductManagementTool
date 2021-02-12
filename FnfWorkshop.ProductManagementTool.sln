@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{E5479A13-F909-421F-8A5B-5BB351528F97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS", "CQRS\CQRS.csproj", "{C436774F-E032-4746-BEA5-CA550051C774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E5479A13-F909-421F-8A5B-5BB351528F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5479A13-F909-421F-8A5B-5BB351528F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5479A13-F909-421F-8A5B-5BB351528F97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C436774F-E032-4746-BEA5-CA550051C774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C436774F-E032-4746-BEA5-CA550051C774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C436774F-E032-4746-BEA5-CA550051C774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C436774F-E032-4746-BEA5-CA550051C774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
