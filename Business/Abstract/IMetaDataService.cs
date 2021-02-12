@@ -11,7 +11,7 @@ namespace Business.Abstract
 {
     public interface IMetaDataService
     {
-        Task<IDataResult<VariationsWithCategoryInfoDto>> GetProductVariantsFromCategory(string categoryName, int applicationId);
+        Task<IDataResult<List< VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName, int applicationId);
         Task<IResult> AddProductAsync(Product product);
         Task<IResult> CheckProductNameExistAsync(string productName);
     }

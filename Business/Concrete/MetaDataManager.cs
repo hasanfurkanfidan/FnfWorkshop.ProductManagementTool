@@ -19,12 +19,15 @@ namespace Business.Concrete
         private readonly IProductRepository _productRepository;
         private readonly IVariationRepository _variationRepository;
         private readonly ICategoryRepository _categoryRepository;
-        
-        public MetaDataManager(IProductRepository productRepository,IVariationRepository variationRepository,ICategoryRepository categoryRepository)
+        private readonly IVariantPictureRepository _variantPictureRepository;
+        private readonly IStockRepository _stockRepository;
+        public MetaDataManager(IProductRepository productRepository,IStockRepository stockRepository,IVariantPictureRepository variantPictureRepository,IVariationRepository variationRepository,ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _variantPictureRepository = variantPictureRepository;
+            _categoryRepository = categoryRepository;
             _variationRepository = variationRepository;
-                 
+            _stockRepository = stockRepository;     
         }
         public async Task<IResult> AddProductAsync(Product product)
         {
@@ -47,7 +50,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public async Task<IDataResult<VariationsWithCategoryInfoDto>> GetProductVariantsFromCategory(string categoryName,int applicationId)
+        public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
         {
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
             var products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.CategoryId == category.Id));
@@ -56,17 +59,25 @@ namespace Business.Concrete
             foreach (var item in products)
             {
                 var model = new VariationsWithCategoryInfoDto();
+                var variants = await _variationRepository.GetListWithSpesificationAsync(new BaseSpesification<Variation>(p => p.ProductId == item.Id&&p.IsActive==true));
+                foreach (var variant in variants)
+                {
+                    model.ProductName = item.Name;
+                    model.TotalData = variants.Count();
+                    var stocks = await _stockRepository.GetListWithSpesificationAsync(new BaseSpesification<Stock>(p => p.ProductId == item.Id && p.VariationId == variant.Id));
+                    if (stocks.Count>0)
+                    {
+                        model.Price = stocks.FirstOrDefault().Price;
+                        list.Add(model);
+                    }
+                }
 
             }
-
-            return new SuccessDataResult<VariationsWithCategoryInfoDto>
+            return new SuccessDataResult<List<VariationsWithCategoryInfoDto>>
             {
-                Data = new VariationsWithCategoryInfoDto
-                {
-
-                },
-                Success = true,
-                Message = ""
+                Data = list,
+                Message = Messages.ProductListWithCategory,
+                Success = true
             };
         }
 

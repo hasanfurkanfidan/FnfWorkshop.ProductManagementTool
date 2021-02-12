@@ -10,5 +10,6 @@ namespace Business.Constants
     {
         public static string ProductAdded { get; set; } = "Product Added Successfully";
         public static string ProductExist { get; set; } = "Product name already exist";
+        public static string ProductListWithCategory { get; set; } = "Product List was brought successfully";
     }
 }

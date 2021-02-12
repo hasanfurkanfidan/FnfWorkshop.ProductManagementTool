@@ -17,6 +17,7 @@ namespace Business.IOC
         {
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IMetaDataService, MetaDataManager>();
+            services.AddScoped<IVariantPictureRepository, VariantPictureRepository>();
         }
     }
 }
