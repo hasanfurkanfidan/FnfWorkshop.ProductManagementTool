@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.VariationListDto;
+using Core.Aspects.Autofac.Caching;
 using Core.Spesification;
 using Core.Utilities.BusinessRule;
 using Core.Utilities.Result;
@@ -49,7 +50,7 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-
+        [CacheAspect(40,Priority =1)]
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
         {
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
@@ -67,11 +68,17 @@ namespace Business.Concrete
                     var stocks = await _stockRepository.GetListWithSpesificationAsync(new BaseSpesification<Stock>(p => p.ProductId == item.Id && p.VariationId == variant.Id));
                     if (stocks.Count>0)
                     {
+                       
                         model.Price = stocks.FirstOrDefault().Price;
                         list.Add(model);
                     }
+                    return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                    {
+                        Data = null,
+                        Success = false,
+                        Message = Messages.ProductNotExist
+                    };
                 }
-
             }
             return new SuccessDataResult<List<VariationsWithCategoryInfoDto>>
             {
