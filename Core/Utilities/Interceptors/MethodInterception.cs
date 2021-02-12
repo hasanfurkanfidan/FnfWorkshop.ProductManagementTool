@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities.Interceptors.Autofac
+namespace Core.Utilities.Interceptors
 {
     public abstract class MethodInterception : MethodInterceptionBaseAttribute
     {
@@ -25,10 +25,33 @@ namespace Core.Utilities.Interceptors.Autofac
         {
 
         }
-        public override async Task Intercept(IInvocation invocation)
+        public override async Task InterceptAsync(IInvocation invocation)
         {
             var isSuccess = true;
             await OnBefore(invocation);
+            try
+            {
+                invocation.Proceed();
+            }
+            catch (Exception e)
+            {
+                isSuccess = false;
+                OnException(invocation);
+                throw;
+            }
+            finally
+            {
+                if (isSuccess)
+                {
+                    OnSuccess(invocation);
+                }
+            }
+            OnAfter(invocation);
+        }
+        public override void Intercept(IInvocation invocation)
+        {
+            var isSuccess = true;
+             OnBefore(invocation).Wait();
             try
             {
                 invocation.Proceed();

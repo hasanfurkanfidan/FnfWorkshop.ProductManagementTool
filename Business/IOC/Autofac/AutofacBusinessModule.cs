@@ -4,7 +4,7 @@ using Castle.DynamicProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Core.Utilities.Interceptors;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +16,7 @@ namespace Business.IOC.Autofac
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new ProxyGenerationOptions() {
-                Selector = AspectInterceptorSelector()
+                Selector =new AspectInterceptorSelector()
             }).SingleInstance();
                 
         }

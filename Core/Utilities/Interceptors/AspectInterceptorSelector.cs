@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Utilities.Interceptors.Autofac
+namespace Core.Utilities.Interceptors
 {
     public class AspectInterceptorSelector : IInterceptorSelector
     {
