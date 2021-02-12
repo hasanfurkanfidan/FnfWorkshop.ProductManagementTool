@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.VariationListDto;
 using Core.Spesification;
 using Core.Utilities.BusinessRule;
 using Core.Utilities.Result;
@@ -16,10 +17,14 @@ namespace Business.Concrete
     public class MetaDataManager : IMetaDataService
     {
         private readonly IProductRepository _productRepository;
+        private readonly IVariationRepository _variationRepository;
+        private readonly ICategoryRepository _categoryRepository;
         
-        public MetaDataManager(IProductRepository productRepository)
+        public MetaDataManager(IProductRepository productRepository,IVariationRepository variationRepository,ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _variationRepository = variationRepository;
+                 
         }
         public async Task<IResult> AddProductAsync(Product product)
         {
@@ -41,5 +46,30 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+
+        public async Task<IDataResult<VariationsWithCategoryInfoDto>> GetProductVariantsFromCategory(string categoryName,int applicationId)
+        {
+            var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
+            var products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.CategoryId == category.Id));
+
+            var list = new List<VariationsWithCategoryInfoDto>();
+            foreach (var item in products)
+            {
+                var model = new VariationsWithCategoryInfoDto();
+
+            }
+
+            return new SuccessDataResult<VariationsWithCategoryInfoDto>
+            {
+                Data = new VariationsWithCategoryInfoDto
+                {
+
+                },
+                Success = true,
+                Message = ""
+            };
+        }
+
+      
     }
 }
