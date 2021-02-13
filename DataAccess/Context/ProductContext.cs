@@ -19,6 +19,7 @@ namespace DataAccess.Context
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Log> Logs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Variation> Variations { get; set; }

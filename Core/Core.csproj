@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Business\" />
+    <Folder Include="CrossCuttingConcerns\Logging\" />
   </ItemGroup>
 
 </Project>
