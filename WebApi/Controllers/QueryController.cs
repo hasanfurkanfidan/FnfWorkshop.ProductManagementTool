@@ -20,12 +20,19 @@ namespace WebApi.Controllers
             _metaDataService = metaDataService;
         }
         [HttpPost]
+       
         public async Task<IActionResult>AddProduct(Product product)
         {
             var jsonData = JsonConvert.SerializeObject(product);
            var classData =  JsonConvert.DeserializeObject<Product>(jsonData);
            var result =  await _metaDataService.AddProductAsync(product);
             return Ok(result.Message);
+        }
+        [HttpGet("getproducts")]
+        public async Task<IActionResult>GetProducts(int applicationId,string categoryName)
+        {
+            var data = await _metaDataService.GetProductVariantsFromCategory(categoryName, applicationId);
+            return Ok(data);
         }
     }
 }

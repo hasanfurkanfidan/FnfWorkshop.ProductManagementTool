@@ -1,4 +1,7 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Business.IOC;
+using Business.IOC.Autofac;
 using Core.DependencyResolvers;
 using Core.Extentions;
 using Microsoft.AspNetCore.Builder;
@@ -32,12 +35,15 @@ namespace WebApi
             services.AddDependencyResolvers(new CoreModule[] {
             new CoreModule()
             });
+         
             services.AddDependencies();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
             });
+           
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

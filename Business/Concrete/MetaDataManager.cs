@@ -52,8 +52,8 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-        [CacheAspect(40,Priority =1)]
-        [LogAspect(typeof(DatabaseLogger),Priority =2)]
+        [CacheAspect(40)]
+        [LogAspect(typeof(DatabaseLogger))]
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
         {
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
@@ -75,12 +75,16 @@ namespace Business.Concrete
                         model.Price = stocks.FirstOrDefault().Price;
                         list.Add(model);
                     }
-                    return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                    else
                     {
-                        Data = null,
-                        Success = false,
-                        Message = Messages.ProductNotExist
-                    };
+                        return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                        {
+                            Data = null,
+                            Success = false,
+                            Message = Messages.ProductNotExist
+                        };
+                    }
+                 
                 }
             }
             return new SuccessDataResult<List<VariationsWithCategoryInfoDto>>

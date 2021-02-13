@@ -18,6 +18,15 @@ namespace Business.IOC
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IMetaDataService, MetaDataManager>();
             services.AddScoped<IVariantPictureRepository, VariantPictureRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<IVariationRepository, VariationRepository>();
+            services.AddScoped<IVariationTypeRepository, VariationTypeRepository>();
+            services.AddScoped<IVariantPictureRepository, VariantPictureRepository>();
+
+
+
         }
     }
 }
