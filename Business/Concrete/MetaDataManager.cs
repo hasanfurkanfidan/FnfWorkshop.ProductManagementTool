@@ -2,6 +2,8 @@
 using Business.Constants;
 using Business.VariationListDto;
 using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Logging;
+using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Spesification;
 using Core.Utilities.BusinessRule;
 using Core.Utilities.Result;
@@ -51,6 +53,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
         [CacheAspect(40,Priority =1)]
+        [LogAspect(typeof(DatabaseLogger),Priority =2)]
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
         {
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));

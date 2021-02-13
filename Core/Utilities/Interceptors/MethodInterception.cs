@@ -9,10 +9,15 @@ namespace Core.Utilities.Interceptors
 {
     public abstract class MethodInterception : MethodInterceptionBaseAttribute
     {
-        protected virtual async Task OnBefore(IInvocation invocation)
+        protected virtual async Task OnBeforeAsync(IInvocation invocation)
         {
 
         }
+        protected virtual void OnBefore(IInvocation invocation)
+        {
+
+        }
+
         protected virtual void OnAfter(IInvocation invocation)
         {
 
@@ -28,7 +33,7 @@ namespace Core.Utilities.Interceptors
         public override async Task InterceptAsync(IInvocation invocation)
         {
             var isSuccess = true;
-            await OnBefore(invocation);
+            await OnBeforeAsync(invocation);
             try
             {
                 invocation.Proceed();
@@ -51,7 +56,7 @@ namespace Core.Utilities.Interceptors
         public override void Intercept(IInvocation invocation)
         {
             var isSuccess = true;
-             OnBefore(invocation).Wait();
+             OnBeforeAsync(invocation).Wait();
             try
             {
                 invocation.Proceed();

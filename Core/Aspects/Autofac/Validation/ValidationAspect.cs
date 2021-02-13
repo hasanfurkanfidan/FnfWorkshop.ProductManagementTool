@@ -23,7 +23,7 @@ namespace Core.Aspects.Autofac.Validation
             }
             _Validator = Validator;
         }
-        protected override async Task OnBefore(IInvocation invocation)
+        protected override async Task OnBeforeAsync(IInvocation invocation)
         {
             var validator =(IValidator<object>)Activator.CreateInstance(_Validator);
             var entityType = _Validator.BaseType.GetGenericArguments()[0];
