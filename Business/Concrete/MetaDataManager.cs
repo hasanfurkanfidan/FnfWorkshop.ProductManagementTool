@@ -53,7 +53,9 @@ namespace Business.Concrete
             return new SuccessResult();
         }
         //[CacheAspect(40)]
-        [LogAspect(typeof(DatabaseLogger))]
+        //[LogAspect(typeof(DatabaseLogger))]
+        [CacheAspect(40)]
+
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
         {
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
