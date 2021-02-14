@@ -58,34 +58,55 @@ namespace Business.Concrete
 
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName, int applicationId)
         {
+            var products = new List<Product>();
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
-            var products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.CategoryId == category.Id));
+            if (category != null)
+            {
+                products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.CategoryId == category.Id));
+
+            }
 
             var list = new List<VariationsWithCategoryInfoDto>();
-            foreach (var item in products)
+            if (products.Count > 0)
             {
-                var model = new VariationsWithCategoryInfoDto();
-                var variant = await _variationRepository.GetWithSpesificationAsync(new BaseSpesification<Variation>(p => p.ProductId == item.Id && p.IsActive == true));
+                foreach (var item in products)
+                {
+                    var model = new VariationsWithCategoryInfoDto();
+                    var variant = await _variationRepository.GetWithSpesificationAsync(new BaseSpesification<Variation>(p => p.ProductId == item.Id && p.IsActive == true));
 
-                model.ProductName = item.Name;
-                model.TotalData = products.Count();
-                var stocks = await _stockRepository.GetListWithSpesificationAsync(new BaseSpesification<Stock>(p => p.ProductId == item.Id && p.VariationId == variant.Id));
-                if (stocks.Count > 0)
-                {
-                    model.Price = stocks.FirstOrDefault().Price;
-                    list.Add(model);
-                }
-                else
-                {
-                    return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                    model.ProductName = item.Name;
+                    model.TotalData = products.Count();
+                    if (variant != null)
                     {
-                        Data = null,
-                        Success = false,
-                        Message = Messages.ProductNotExist
-                    };
+                        var stocks = await _stockRepository.GetListWithSpesificationAsync(new BaseSpesification<Stock>(p => p.ProductId == item.Id && p.VariationId == variant.Id));
+                        if (stocks.Count > 0)
+                        {
+                            model.Price = stocks.FirstOrDefault().Price;
+                            list.Add(model);
+                        }
+                        else
+                        {
+                            return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                            {
+                                Data = null,
+                                Success = false,
+                                Message = Messages.ProductNotExist
+                            };
+                        }
+                    }
+                    
+
+
                 }
-
-
+            }
+            else
+            {
+                return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                {
+                    Data = null,
+                    Success = false,
+                    Message = Messages.ProductNotExist
+                };
             }
             return new SuccessDataResult<List<VariationsWithCategoryInfoDto>>
             {

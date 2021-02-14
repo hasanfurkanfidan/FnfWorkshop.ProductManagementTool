@@ -2,6 +2,7 @@
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
 using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
+using CQRS.Query;
 using Enities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +34,9 @@ namespace WebApi.Controllers
         }
         [HttpGet("getproducts")]
         [CacheAspect(duration:40)]
-        public async Task<IActionResult>GetProducts(int applicationId,string categoryName)
+        public async Task<IActionResult>GetProducts(GetProductsWithCategoryQuery query)
         {
-            var data = await _metaDataService.GetProductVariantsFromCategory(categoryName, applicationId);
+            var data = await _metaDataService.GetProductVariantsFromCategory(query.CategoryName, query.ApplicationId);
             return Ok(data);
         }
     }
