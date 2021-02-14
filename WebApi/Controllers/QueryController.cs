@@ -23,15 +23,6 @@ namespace WebApi.Controllers
         {
             _metaDataService = metaDataService;
         }
-        [HttpPost]
-       
-        public async Task<IActionResult>AddProduct(Product product)
-        {
-           var jsonData = JsonConvert.SerializeObject(product);
-           var classData =  JsonConvert.DeserializeObject<Product>(jsonData);
-           var result =  await _metaDataService.AddProductAsync(product);
-            return Ok(result.Message);
-        }
         [HttpGet("getproducts")]
         [CacheAspect(duration:40)]
         public async Task<IActionResult>GetProducts(GetProductsWithCategoryQuery query)
