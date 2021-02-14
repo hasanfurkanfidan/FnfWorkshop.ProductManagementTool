@@ -24,18 +24,18 @@ namespace Business.Concrete
         private readonly ICategoryRepository _categoryRepository;
         private readonly IVariantPictureRepository _variantPictureRepository;
         private readonly IStockRepository _stockRepository;
-        public MetaDataManager(IProductRepository productRepository,IStockRepository stockRepository,IVariantPictureRepository variantPictureRepository,IVariationRepository variationRepository,ICategoryRepository categoryRepository)
+        public MetaDataManager(IProductRepository productRepository, IStockRepository stockRepository, IVariantPictureRepository variantPictureRepository, IVariationRepository variationRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _variantPictureRepository = variantPictureRepository;
             _categoryRepository = categoryRepository;
             _variationRepository = variationRepository;
-            _stockRepository = stockRepository;     
+            _stockRepository = stockRepository;
         }
         public async Task<IResult> AddProductAsync(Product product)
         {
             var result = BusinessRules.Run(await CheckProductNameExistAsync(product.Name));
-            if (result!=null)
+            if (result != null)
             {
                 return result;
             }
@@ -46,7 +46,7 @@ namespace Business.Concrete
         public async Task<IResult> CheckProductNameExistAsync(string productName)
         {
             var products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.Name == productName));
-            if (products.Count>0)
+            if (products.Count > 0)
             {
                 return new ErrorResult(Messages.ProductExist);
             }
@@ -56,7 +56,7 @@ namespace Business.Concrete
         //[LogAspect(typeof(DatabaseLogger))]
         [CacheAspect(40)]
 
-        public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
+        public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName, int applicationId)
         {
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
             var products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.CategoryId == category.Id));
@@ -65,29 +65,27 @@ namespace Business.Concrete
             foreach (var item in products)
             {
                 var model = new VariationsWithCategoryInfoDto();
-                var variants = await _variationRepository.GetListWithSpesificationAsync(new BaseSpesification<Variation>(p => p.ProductId == item.Id&&p.IsActive==true));
-                foreach (var variant in variants)
+                var variant = await _variationRepository.GetWithSpesificationAsync(new BaseSpesification<Variation>(p => p.ProductId == item.Id && p.IsActive == true));
+
+                model.ProductName = item.Name;
+                model.TotalData = products.Count();
+                var stocks = await _stockRepository.GetListWithSpesificationAsync(new BaseSpesification<Stock>(p => p.ProductId == item.Id && p.VariationId == variant.Id));
+                if (stocks.Count > 0)
                 {
-                    model.ProductName = item.Name;
-                    model.TotalData = variants.Count();
-                    var stocks = await _stockRepository.GetListWithSpesificationAsync(new BaseSpesification<Stock>(p => p.ProductId == item.Id && p.VariationId == variant.Id));
-                    if (stocks.Count>0)
-                    {
-                       
-                        model.Price = stocks.FirstOrDefault().Price;
-                        list.Add(model);
-                    }
-                    else
-                    {
-                        return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
-                        {
-                            Data = null,
-                            Success = false,
-                            Message = Messages.ProductNotExist
-                        };
-                    }
-                 
+                    model.Price = stocks.FirstOrDefault().Price;
+                    list.Add(model);
                 }
+                else
+                {
+                    return new ErrorDataResult<List<VariationsWithCategoryInfoDto>>
+                    {
+                        Data = null,
+                        Success = false,
+                        Message = Messages.ProductNotExist
+                    };
+                }
+
+
             }
             return new SuccessDataResult<List<VariationsWithCategoryInfoDto>>
             {
@@ -97,6 +95,6 @@ namespace Business.Concrete
             };
         }
 
-      
+
     }
 }

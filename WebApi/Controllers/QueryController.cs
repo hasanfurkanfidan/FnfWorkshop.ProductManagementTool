@@ -31,7 +31,8 @@ namespace WebApi.Controllers
            var result =  await _metaDataService.AddProductAsync(product);
             return Ok(result.Message);
         }
-        [HttpGet("getproducts")]      
+        [HttpGet("getproducts")]
+        [CacheAspect(duration:40)]
         public async Task<IActionResult>GetProducts(int applicationId,string categoryName)
         {
             var data = await _metaDataService.GetProductVariantsFromCategory(categoryName, applicationId);
