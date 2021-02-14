@@ -52,7 +52,7 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-        [CacheAspect(40)]
+        //[CacheAspect(40)]
         [LogAspect(typeof(DatabaseLogger))]
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName,int applicationId)
         {

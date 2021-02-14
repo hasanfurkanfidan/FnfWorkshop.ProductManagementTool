@@ -36,7 +36,6 @@ namespace WebApi
             new CoreModule()
             });
          
-            services.AddDependencies();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

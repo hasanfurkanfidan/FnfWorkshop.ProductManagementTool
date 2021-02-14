@@ -13,30 +13,43 @@ namespace Core.Aspects.Autofac.Logging
 {
     public class LogAspect : MethodInterception
     {
-        private readonly LoggerServiceBase _loggerServiceBase;
+        private LoggerServiceBase _loggerServiceBase;
         public LogAspect(Type loggerService)
         {
-            if (loggerService.BaseType!=typeof(LoggerServiceBase))
+            if (loggerService.BaseType != typeof(LoggerServiceBase))
             {
-                throw new Exception(AspectMessages.LoggerType);
+                throw new System.Exception(AspectMessages.LoggerType);
             }
-            _loggerServiceBase =(LoggerServiceBase) Activator.CreateInstance(loggerService);
+
+            _loggerServiceBase = (LoggerServiceBase)Activator.CreateInstance(loggerService);
         }
+
         protected override void OnBefore(IInvocation invocation)
         {
             _loggerServiceBase.Info(GetLogDetail(invocation));
         }
+
         private LogDetail GetLogDetail(IInvocation invocation)
         {
-            var logParameters = invocation.Arguments.Select(x => new LogParameter { Value = x, Type = x.GetType().Name, }).ToList();
+            var logParameters = new List<LogParameter>();
+            for (int i = 0; i < invocation.Arguments.Length; i++)
+            {
+                logParameters.Add(new LogParameter
+                {
+                    Name = invocation.GetConcreteMethod().GetParameters()[i].Name,
+                    Value = invocation.Arguments[i],
+                    Type = invocation.Arguments[i].GetType().Name
+                });
+            }
+
             var logDetail = new LogDetail
             {
                 MethodName = invocation.Method.Name,
-                ApplicationId =Convert.ToInt32(logParameters.Where(p=>p.Name == "applicationId").FirstOrDefault().Value),
-                LogParameters = logParameters,
-                
+                ApplicationId =Convert.ToInt32( logParameters.Where(p=>p.Name=="applicationId").FirstOrDefault().Value),
+                LogParameters = logParameters
             };
+
             return logDetail;
-        } 
+        }
     }
 }

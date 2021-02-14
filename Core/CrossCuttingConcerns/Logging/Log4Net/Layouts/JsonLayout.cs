@@ -12,6 +12,10 @@ namespace Core.CrossCuttingConcerns.Logging.Log4Net.Layouts
 {
     public class JsonLayout:LayoutSkeleton
     {
+        public override void ActivateOptions()
+        {
+
+        }
         public override void Format(TextWriter writer, LoggingEvent loggingEvent)
         {
             var logEvent = new SerializeableLogEvent(loggingEvent);
@@ -20,9 +24,7 @@ namespace Core.CrossCuttingConcerns.Logging.Log4Net.Layouts
             writer.WriteLine(json);
 
         }
-        public override void ActivateOptions()
-        {
-            throw new NotImplementedException();
-        }
+
+       
     }
 }

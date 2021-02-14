@@ -10,7 +10,6 @@ namespace Core.CrossCuttingConcerns.Logging
     {
         public string Name { get; set; }
         public object Value { get; set; }
-        public int ApplicationId { get; set; }
         public string Type { get; set; }
     }
 }
