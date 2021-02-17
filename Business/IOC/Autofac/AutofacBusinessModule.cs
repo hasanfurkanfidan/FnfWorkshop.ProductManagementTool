@@ -11,6 +11,8 @@ using Business.Concrete;
 using Business.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Abstract;
+using FluentValidation;
+using Business.Validations;
 
 namespace Business.IOC.Autofac
 {
@@ -24,6 +26,7 @@ namespace Business.IOC.Autofac
             builder.RegisterType<VariationRepository>().As<IVariationRepository>();
             builder.RegisterType<VariantPictureRepository>().As<IVariantPictureRepository>();
             builder.RegisterType<CategoryRepository>().As<ICategoryRepository>();
+
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces().EnableInterfaceInterceptors(new ProxyGenerationOptions() {

@@ -2,8 +2,11 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.IOC;
 using Business.IOC.Autofac;
+using Business.Validations;
 using Core.DependencyResolvers;
 using Core.Extentions;
+using CQRS.Query;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,10 +35,11 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IValidator<GetProductsWithCategoryQuery>, GetProductListWithCategoryValidate>();
             services.AddDependencyResolvers(new CoreModule[] {
             new CoreModule()
             });
-         
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

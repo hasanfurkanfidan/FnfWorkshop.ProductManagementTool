@@ -33,7 +33,7 @@ namespace Core.Utilities.Interceptors
         public override async Task InterceptAsync(IInvocation invocation)
         {
             var isSuccess = true;
-            await OnBeforeAsync(invocation);
+            OnBefore(invocation);
             try
             {
                 invocation.Proceed();
@@ -56,7 +56,7 @@ namespace Core.Utilities.Interceptors
         public override void Intercept(IInvocation invocation)
         {
             var isSuccess = true;
-            OnBeforeAsync(invocation).Wait();
+           
             OnBefore(invocation);
             try
             {

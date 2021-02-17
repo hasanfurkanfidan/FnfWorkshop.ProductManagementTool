@@ -1,12 +1,15 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.Validations;
 using Business.VariationListDto;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.Spesification;
 using Core.Utilities.BusinessRule;
 using Core.Utilities.Result;
+using CQRS.Query;
 using DataAccess.Abstract;
 using Enities.Concrete;
 using System;
@@ -52,14 +55,15 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-        //[CacheAspect(40)]
+      
         //[LogAspect(typeof(DatabaseLogger))]
         [CacheAspect(40)]
+        [ValidationAspect(typeof(GetProductListWithCategoryValidate))]
 
-        public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(string categoryName, int applicationId)
+        public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(GetProductsWithCategoryQuery query)
         {
             var products = new List<Product>();
-            var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == categoryName));
+            var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == query.CategoryName));
             if (category != null)
             {
                 products = await _productRepository.GetListWithSpesificationAsync(new BaseSpesification<Product>(p => p.CategoryId == category.Id));

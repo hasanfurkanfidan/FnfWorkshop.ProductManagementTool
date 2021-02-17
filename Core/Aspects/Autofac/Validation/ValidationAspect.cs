@@ -23,17 +23,17 @@ namespace Core.Aspects.Autofac.Validation
             }
             _Validator = Validator;
         }
-        protected override async Task OnBeforeAsync(IInvocation invocation)
+        protected override void OnBefore(IInvocation invocation)
         {
             var validator =(IValidator<object>)Activator.CreateInstance(_Validator);
             var entityType = _Validator.BaseType.GetGenericArguments()[0];
             var entities = invocation.Arguments.Where(t => t.GetType() == entityType);
             foreach (var entity in entities)
             {
-                await ValidationTool.ValidateAsync<object>(validator, entity);
+                 ValidationTool.Validate(validator, entity);
             }
 
-
         }
+    
     }
 }

@@ -1,9 +1,13 @@
 ﻿using Business.Abstract;
+using Business.Validations;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
+using Core.Utilities.Result;
 using CQRS.Query;
 using Enities.Concrete;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -24,11 +28,12 @@ namespace WebApi.Controllers
             _metaDataService = metaDataService;
         }
         [HttpGet("getproducts")]
-        [CacheAspect(duration:40)]
-        public async Task<IActionResult>GetProducts(GetProductsWithCategoryQuery query)
-        {
-            var data = await _metaDataService.GetProductVariantsFromCategory(query.CategoryName, query.ApplicationId);
-            return Ok(data);
+        [ValidationAspect(typeof(GetProductListWithCategoryValidate))]
+        public async Task<IActionResult> GetProducts(GetProductsWithCategoryQuery query)
+        {         
+                var data = await _metaDataService.GetProductVariantsFromCategory(query);
+                return Ok(data);
+         
         }
     }
 }
