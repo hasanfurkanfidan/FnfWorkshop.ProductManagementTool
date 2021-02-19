@@ -2,25 +2,30 @@
 using Core.CrossCuttingConcerns.Logging;
 using Core.CrossCuttingConcerns.Logging.Log4Net;
 using Core.Utilities.Interceptors;
+using Core.Utilities.IOC;
 using Core.Utilities.Messages;
+using Microsoft.AspNetCore.Http;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Core.Aspects.Autofac.Logging
 {
     public class LogAspect : MethodInterception
     {
         private LoggerServiceBase _loggerServiceBase;
+        private IHttpContextAccessor _httpContextAccessor;
         public LogAspect(Type loggerService)
         {
             if (loggerService.BaseType != typeof(LoggerServiceBase))
             {
                 throw new System.Exception(AspectMessages.LoggerType);
             }
-
+            _httpContextAccessor = ServiceTool.ServiceProvider.GetService<IHttpContextAccessor>();
             _loggerServiceBase = (LoggerServiceBase)Activator.CreateInstance(loggerService);
         }
 
@@ -29,7 +34,7 @@ namespace Core.Aspects.Autofac.Logging
             _loggerServiceBase.Info(GetLogDetail(invocation));
         }
 
-        private LogDetail GetLogDetail(IInvocation invocation)
+        private string GetLogDetail(IInvocation invocation)
         {
             var logParameters = new List<LogParameter>();
             for (int i = 0; i < invocation.Arguments.Length; i++)
@@ -41,15 +46,19 @@ namespace Core.Aspects.Autofac.Logging
                     Type = invocation.Arguments[i].GetType().Name
                 });
             }
-
             var logDetail = new LogDetail
             {
                 MethodName = invocation.Method.Name,
-                ApplicationId =Convert.ToInt32( logParameters.Where(p=>p.Name=="applicationId").FirstOrDefault().Value),
+                ApplicationId = Convert.ToInt32(logParameters.Where(p => p.Name == "applicationId").FirstOrDefault().Value),
                 LogParameters = logParameters
             };
+            if (_httpContextAccessor.HttpContext.User !=null)
+            {
+                logDetail.UserName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            }
 
-            return logDetail;
+
+            return JsonConvert.SerializeObject(logDetail);
         }
     }
 }

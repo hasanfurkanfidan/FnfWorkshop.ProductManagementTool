@@ -5,7 +5,7 @@ using Business.VariationListDto;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Spesification;
 using Core.Utilities.BusinessRule;
 using Core.Utilities.Result;

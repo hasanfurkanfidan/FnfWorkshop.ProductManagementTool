@@ -36,6 +36,7 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IValidator<GetProductsWithCategoryQuery>, GetProductListWithCategoryValidate>();
+            services.AddHttpContextAccessor();
             services.AddDependencyResolvers(new CoreModule[] {
             new CoreModule()
             });

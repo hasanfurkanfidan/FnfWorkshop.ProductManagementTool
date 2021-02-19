@@ -10,8 +10,9 @@ namespace Enities.Concrete
     public class Log:IEntity
     {
         public int Id { get; set; }
-        public string Detail { get; set; }
-        public DateTime Date { get; set; }
-        public string Urgency { get; set; }
+        public string MessageTemplate { get; set; }
+        public string Level { get; set; }
+        public DateTimeOffset TimeStamp { get; set; }
+        public string Exception { get; set; }
     }
 }
