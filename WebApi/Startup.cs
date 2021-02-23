@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Business.IOC;
 using Business.IOC.Autofac;
 using Business.Validations;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.DependencyResolvers;
 using Core.Extentions;
 using CQRS.Query;
@@ -35,6 +36,9 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<DatabaseLogger>();
+            services.AddTransient<FileLogger>();
+
             services.AddTransient<IValidator<GetProductsWithCategoryQuery>, GetProductListWithCategoryValidate>();
             services.AddHttpContextAccessor();
             services.AddDependencyResolvers(new CoreModule[] {
@@ -59,7 +63,7 @@ namespace WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
 
             app.UseRouting();

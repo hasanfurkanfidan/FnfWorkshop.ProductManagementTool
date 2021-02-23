@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Core.CrossCuttingConcerns.Logging.Log4Net
+namespace Core.CrossCuttingConcerns.Logging.Serilog
 {
     public class LoggerServiceBase
     {

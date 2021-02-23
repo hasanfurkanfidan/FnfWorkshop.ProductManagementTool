@@ -28,7 +28,7 @@ namespace WebApi.Controllers
             _metaDataService = metaDataService;
         }
         [HttpGet("getproducts")]
-        [ValidationAspect(typeof(GetProductListWithCategoryValidate))]
+        [LogAspect(typeof(DatabaseLogger))]
         public async Task<IActionResult> GetProducts(GetProductsWithCategoryQuery query)
         {         
                 var data = await _metaDataService.GetProductVariantsFromCategory(query);

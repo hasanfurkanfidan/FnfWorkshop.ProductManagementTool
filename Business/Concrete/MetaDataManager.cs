@@ -57,11 +57,12 @@ namespace Business.Concrete
         }
       
         //[LogAspect(typeof(DatabaseLogger))]
-        [CacheAspect(40)]
         [ValidationAspect(typeof(GetProductListWithCategoryValidate))]
-
+        [CacheAspect(40)]
+        [LogAspect(typeof(DatabaseLogger))]
         public async Task<IDataResult<List<VariationsWithCategoryInfoDto>>> GetProductVariantsFromCategory(GetProductsWithCategoryQuery query)
         {
+
             var products = new List<Product>();
             var category = await _categoryRepository.GetWithSpesificationAsync(new BaseSpesification<Category>(p => p.Name == query.CategoryName));
             if (category != null)
@@ -100,7 +101,6 @@ namespace Business.Concrete
                     }
                     
 
-
                 }
             }
             else
@@ -116,7 +116,6 @@ namespace Business.Concrete
             {
                 Data = list,
                 Message = Messages.ProductListWithCategory,
-                Success = true
             };
         }
 

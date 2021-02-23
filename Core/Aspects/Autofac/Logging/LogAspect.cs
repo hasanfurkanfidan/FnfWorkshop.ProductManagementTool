@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using Core.CrossCuttingConcerns.Logging;
-using Core.CrossCuttingConcerns.Logging.Log4Net;
+using Core.CrossCuttingConcerns.Logging.Serilog;
 using Core.Utilities.Interceptors;
 using Core.Utilities.IOC;
 using Core.Utilities.Messages;
@@ -31,7 +31,11 @@ namespace Core.Aspects.Autofac.Logging
 
         protected override void OnBefore(IInvocation invocation)
         {
-            _loggerServiceBase.Info(GetLogDetail(invocation));
+          _loggerServiceBase.Info(GetLogDetail(invocation));
+            if (true)
+            {
+
+            }
         }
 
         private string GetLogDetail(IInvocation invocation)
@@ -49,7 +53,6 @@ namespace Core.Aspects.Autofac.Logging
             var logDetail = new LogDetail
             {
                 MethodName = invocation.Method.Name,
-                ApplicationId = Convert.ToInt32(logParameters.Where(p => p.Name == "applicationId").FirstOrDefault().Value),
                 LogParameters = logParameters
             };
             if (_httpContextAccessor.HttpContext.User !=null)

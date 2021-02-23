@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CQRS\CQRS.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\log\" />
+  </ItemGroup>
+
 </Project>

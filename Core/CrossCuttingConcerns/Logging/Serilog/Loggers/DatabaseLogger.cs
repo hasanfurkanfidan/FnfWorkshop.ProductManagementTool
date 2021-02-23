@@ -11,24 +11,22 @@ using Serilog.Configuration;
 using Core.CrossCuttingConcerns.Logging.Serilog.Loggers.LoggerConfigurations;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
-using Core.CrossCuttingConcerns.Logging.Log4Net;
+using Core.CrossCuttingConcerns.Logging.Serilog;
 
 namespace Core.CrossCuttingConcerns.Logging.Serilog.Loggers
 {
-    public class DatabaseLogger:LoggerServiceBase
+    public class DatabaseLogger : LoggerServiceBase
     {
         public DatabaseLogger()
         {
-			var configuration = ServiceTool.ServiceProvider.GetService<Microsoft.Extensions.Configuration.IConfiguration>();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-			var logConfig = configuration.GetSection("SeriLogConfigurations:MsSqlConfiguration")
-					.Get<MsSqlConfiguration>() ?? throw new Exception("Null");
-			var sinkOpts = new MSSqlServerSinkOptions { TableName = "Logs", AutoCreateSqlTable = true };
+            var sinkOpts = new MSSqlServerSinkOptions { TableName = "Logs", AutoCreateSqlTable = true };
 
-			var seriLogConfig = new LoggerConfiguration()
-										.WriteTo.MSSqlServer(connectionString: "Server=ProductManagementTool.mssql.somee.com;Database=ProductManagementTool;user id=hasanfurkanfidan_SQLLogin_1;password=b9w53l2io7", sinkOptions: sinkOpts)
-										.CreateLogger();
-			Logger = seriLogConfig;
-		}
+            var seriLogConfig = new LoggerConfiguration()
+                                        .ReadFrom.Configuration(configuration)
+                                        .CreateLogger();
+            Logger = seriLogConfig;
+        }
     }
 }

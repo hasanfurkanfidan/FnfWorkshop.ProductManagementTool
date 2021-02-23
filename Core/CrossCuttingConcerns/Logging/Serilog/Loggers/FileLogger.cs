@@ -10,8 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Serilog;
-using Core.CrossCuttingConcerns.Logging.Log4Net;
-using Core.CrossCuttingConcerns.Logging.Serilog.Loggers.LoggerConfigurations;
+using Core.CrossCuttingConcerns.Logging.Serilog;
 
 namespace Core.CrossCuttingConcerns.Logging.Serilog.Loggers
 {
@@ -21,10 +20,8 @@ namespace Core.CrossCuttingConcerns.Logging.Serilog.Loggers
         {
             var configuration = ServiceTool.ServiceProvider.GetService<IConfiguration>();
 
-            var logConfig = configuration.GetSection("SeriLogConfigurations:FileLogConfiguration")
-                .Get<FileLogConfiguration>() ?? throw new Exception("null");
 
-            var logFilePath = string.Format("{0}{1}", Directory.GetCurrentDirectory() + logConfig.FolderPath, ".txt");
+            var logFilePath = string.Format("{0}{1}", Directory.GetCurrentDirectory() + @"\log\", ".txt");
 
             Logger = new LoggerConfiguration()
                     .WriteTo.File(logFilePath,
